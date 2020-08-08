@@ -8,6 +8,8 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+var Vue = require('vue');
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -21,12 +23,30 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
+//Vue.component('posts-component', require('./components/PostsComponent.vue'));
+
+import teamComponent from './components/TeamComponent.vue';
+import playerComponent from './components/PlayerComponent.vue';
+import VueResource from 'vue-resource';
+import BootstrapVue from 'bootstrap-vue'
+Vue.component('pagination', require('laravel-vue-pagination'));
+Vue.use(VueResource);
+Vue.use(BootstrapVue);
+Vue.http.headers.common['X-CSRF-TOKEN'] = $('meta[name="csrf-token"]').attr("content");
+const app = new Vue({
+    el: '#app',
+    components: {
+        'teams-component':  teamComponent,
+        'players-component': playerComponent,
+    }
+});
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const app = new Vue({
-    el: '#app',
-});
+// const app = new Vue({
+//     el: '#app',
+// });
