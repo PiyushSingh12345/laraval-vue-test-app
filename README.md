@@ -32,7 +32,7 @@ Schema for players table (you may add additional fields as needed):
 * created_at
 * updated_at
 
-Installation
+# Installation
 
 * type git clone https://github.com/PiyushSingh12345/laraval-vue-test-app.git projectname to clone the repository
 * type cd projectname
