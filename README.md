@@ -32,4 +32,22 @@ Schema for players table (you may add additional fields as needed):
 * created_at
 * updated_at
 
+Installation
+
+* type git clone https://github.com/PiyushSingh12345/laraval-vue-test-app.git projectname to clone the repository
+* type cd projectname
+* type composer install
+* type composer update
+* copy .env.example to .env
+* type php artisan key:generateto regenerate secure key
+ * use MySQL in .env file 
+    set DB_CONNECTION
+    set DB_DATABASE
+    set DB_USERNAME
+    set DB_PASSWORD
+* npm install
+* npm run dev
+* php artisan migrate
+* php artisan db:seed
+
 
