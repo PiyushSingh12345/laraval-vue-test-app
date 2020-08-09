@@ -10,6 +10,10 @@ use App\Player;
 use App\Http\Resources\Team as TeamResource;
 use App\Http\Resources\TeamCollection;
 use App\Team;
+use App\Http\Requests;
+use Validator;
+use Response;
+use Illuminate\Support\Facades\Input;
 
 class PlayerController extends Controller
 {
@@ -31,6 +35,11 @@ class PlayerController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request,[
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'team_id' => 'required',
+        ]);
         $players = new Player();
         $players->first_name = $request->first_name;
         $players->last_name = $request->last_name;
@@ -59,6 +68,11 @@ class PlayerController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request,[
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'team_id' => 'required',
+        ]);
         $players = Player::find($id);
         $players->first_name = $request->first_name;
         $players->last_name = $request->last_name;

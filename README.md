@@ -45,9 +45,10 @@ Schema for players table (you may add additional fields as needed):
     set DB_DATABASE
     set DB_USERNAME
     set DB_PASSWORD
-* npm install
-* npm run dev
 * php artisan migrate
 * php artisan db:seed
+* npm install
+* npm run dev
+
 
 

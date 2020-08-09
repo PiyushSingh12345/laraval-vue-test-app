@@ -2,11 +2,13 @@
     <div class="row justify-content-center">
         
         <div class="col-md-8">
+            <!-- Display Message -->
             <div v-bind:class="{ succmsg: succmsg }">
                 <div class="form-group">
                     <div class="alert alert-success">{{ actionmsg }}</div>
                 </div>
             </div>
+            <!-- Add Player  -->
             <form method="post" name="addplayer" id="addplayer" action="#" enctype="multipart/form-data" @submit.prevent="addplayer">
                 <div class="form-group row">
                     <label for="pf_name" class="col-md-2 col-form-label">First Name</label>
@@ -34,9 +36,12 @@
                     </div>
                 </div>
             </form>
+
+            <!-- Show Player List -->
             <hr class="border-primary"/>
-            <h3>player List</h3>
-            <div class="table-responsive" v-if="player_record">          
+            <h3 v-if="player_record[0]">Player List</h3>
+            <!-- <h3 v-if="!player_record[0]" class="text-center text-danger">There is no player added yet!</h3> -->
+            <div class="table-responsive" v-if="player_record[0]">          
                 <table class="table" >
                     <thead>
                         <tr>
@@ -60,14 +65,14 @@
                 </table>
             </div>
 
-            
+            <!-- Update Player Modal -->
              <div class="modal fade" id="editplayerModal" v-if="show_modal">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                     
                         <!-- Modal Header -->
                         <div class="modal-header">
-                        <h4 class="modal-title">player Edit</h4>
+                        <h4 class="modal-title">Player Edit</h4>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         </div>
                         
@@ -75,21 +80,21 @@
                         <div class="modal-body">
                             <form method="post" name="updateplayer" id="updateplayer" action="#" enctype="multipart/form-data" @submit.prevent="updateplayer">
                                 <div class="form-group row">
-                                    <label for="pf_name" class="col-md-4 col-form-label">First Name</label>
+                                    <label for="pf_name"  class="col-md-4 col-form-label">First Name</label>
                                     <div class="col-md-8">
-                                        <input @keydown.space.prevent id="pf_name" name="ufirst_name" type="text" class="form-control" v-model="player.ufirst_name"  value="" required>
+                                        <input @keydown.space.prevent id="pf_name" name="ufirst_name" type="text" class="form-control" v-model="upost.ufirst_name"  value="" required>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="pl_name" class="col-md-4 col-form-label">Last Name</label>
                                     <div class="col-md-8">
-                                        <input @keydown.space.prevent id="pl_name" name="ulast_name" type="text" class="form-control" v-model="player.ulast_name"  value="" required>
+                                        <input @keydown.space.prevent id="pl_name" name="ulast_name" type="text" class="form-control" v-model="upost.ulast_name"  value="" required>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="pt_id" class="col-md-4 col-form-label">Select Team</label>
                                     <div class="col-md-8">
-                                        <select class="form-control" id="pt_id" name="uteam_id" v-model="player.uteam_id" required>
+                                        <select class="form-control" id="pt_id" name="uteam_id" v-model="upost.uteam_id"  required>
                                             <option value="">Select from here</option>
                                             <option v-for="(team, index) in team_record" :key="index" :value="team.id">{{team.name}}</option>
                                             
@@ -102,8 +107,8 @@
                         
                         <!-- Modal footer -->
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">
-                                Add Player
+                            <button type="submit" class="btn btn-primary" v-on:click="updateplayer">
+                                Update Player
                             </button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
@@ -112,7 +117,7 @@
                 </div>
             </div>
 
-
+            <!-- Delete Player Modal -->
             <div class="modal fade" id="deleteplayerModal">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
@@ -197,7 +202,9 @@ export default {
                         this.succmsg = false;
                         console.log(data);
                         this.getplayerData();
-                        this.player.pf_name = '';
+                        this.player.first_name = '';
+                        this.player.last_name = '';
+                        this.player.team_id = '';
                         this.actionmsg = "player name inserted successfully";
 
                         var self = this;
@@ -206,22 +213,28 @@ export default {
                         },3000);
                     });
             },
-            edit_player(id,name){
+            edit_player(id,first_name,last_name,team_id){
                 this.show_modal = true;
                 this.upost.uid= id;
-                this.upost.uname = name;
+
+                this.upost.ufirst_name = first_name;
+                this.upost.ulast_name = last_name;
+                this.upost.uteam_id = team_id;
+                // this.http.get(`/api/teams/${team_id}`)
+                
             },
             updateplayer(){
-                alert(this.upost);
                 this.$http.put(`/api/players/${this.upost.uid}`, {
-                        'first_name': this.upost.uname,
-                        'last_name': this.upost.uname,
-                        'team_id': this.upost.uname,
+                        'first_name': this.upost.ufirst_name,
+                        'last_name': this.upost.ulast_name,
+                        'team_id': this.upost.uteam_id,
                     })
                     .then(response => {
                           this.succmsg = false;
                           this.upost.uid= '';
-                          this.upost.uname='';
+                          this.upost.ufirst_name='';
+                          this.upost.ulast_name='';
+                          this.upost.uteam_id='';
                           this.getplayerData();
                           var self = this;
                           setTimeout(function(){
@@ -231,7 +244,6 @@ export default {
                           this.show_modal = false;
 
                           $('#editplayerModal').modal('hide');
-                          
                           
                     })
                     .catch(error => {
@@ -268,7 +280,7 @@ export default {
                             self.succmsg = true;
                         },3000);
                          
-                        this.actionmsg = "player name deleted successfully";
+                        this.actionmsg = "player deleted successfully";
                         this.getplayerData();
                         $('#deleteplayerModal').modal('hide');
                     });
@@ -284,9 +296,5 @@ export default {
 <style scoped>
     .succmsg {
         display: none;
-    }
-    .showmodal {
-        display: none !important;
-        opacity: 0;
     }
 </style>

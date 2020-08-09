@@ -7,6 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Team as TeamResource;
 use App\Http\Resources\TeamCollection;
 use App\Team;
+use App\Http\Requests;
+use Validator;
+use Response;
+use Illuminate\Support\Facades\Input;
 
 class TeamController extends Controller
 {
@@ -19,7 +23,6 @@ class TeamController extends Controller
     {
         
         return new TeamResource(Team::all()->sortByDesc('id'));
-        // return new TeamCollection(Team::paginate(3));
         
     }
 
@@ -31,6 +34,9 @@ class TeamController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request,[
+            'team_name' => 'required',
+        ]);
         $teams = new Team();
         $teams->name = $request->team_name;
         $teams->save();
@@ -57,6 +63,9 @@ class TeamController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request,[
+            'team_name' => 'required',
+        ]);
         $teams = Team::find($id);
         $teams->name = $request->team_name;
         $teams->save();
@@ -73,6 +82,7 @@ class TeamController extends Controller
     public function destroy($id)
     {
         $teams = Team::findOrFail($id);
+        // $team->players()->delete();
         $teams->delete();
         
         return new TeamResource($teams);

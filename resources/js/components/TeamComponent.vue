@@ -22,8 +22,9 @@
                 </div>
             </form>
             <hr class="border-primary"/>
-            <h3>Team List</h3>
-            <div class="table-responsive" v-if="team_record">          
+            <h3 v-if="team_record[0]">Team List</h3>
+            <!-- <h3 v-if="!team_record[0]" class="text-center text-danger">There is no team added yet!</h3> -->
+            <div class="table-responsive" v-if="team_record[0]">          
                 <table class="table" >
                     <thead>
                         <tr>
